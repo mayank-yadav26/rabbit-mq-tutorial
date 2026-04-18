@@ -1,0 +1,44 @@
+# Maven
+target/
+*.class
+pom.xml.tag
+pom.xml.releaseBackup
+release.properties
+.flattened-pom.xml
+
+# IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Certificates - IMPORTANT: Never commit generated certificates!
+# Keep only README.md in certificates/ folder
+certificates/result/
+certificates/tls-gen/
+*.pem
+*.p12
+*.jks
+*.cer
+*.csr
+*.key
+
+# Logs
+logs/
+*.log
+
+# Build
+.gradle/
+build/
+
+# Environment files
+.env
+.env.local

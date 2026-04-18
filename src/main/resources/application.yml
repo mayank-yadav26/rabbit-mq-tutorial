@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: rabbitmq-mtls-tutorial
+
+  rabbitmq:
+    # RabbitMQ Server Configuration
+    host: localhost
+    port: 5671  # SSL port (mTLS)
+    username: guest
+    password: guest
+
+    # SSL/TLS Configuration for mTLS
+    # These paths are relative to the working directory when running the application
+    ssl:
+      enabled: true
+      key-store: classpath:client_key.p12
+      key-store-password: password
+      key-store-type: PKCS12
+      trust-store: classpath:ca_truststore.jks
+      trust-store-password: password
+      trust-store-type: JKS
+      algorithm: TLSv1.2
+
+    # Connection pool settings
+    connection-timeout: 10000
+    requested-heartbeat: 60
+    requested-channel-max: 2048
+
+logging:
+  level:
+    root: INFO
+    com.example.rabbitmq: DEBUG
+    org.springframework.amqp: INFO
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+
+# Server configuration for REST endpoints
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+# Management (optional - for actuator endpoints in future)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always

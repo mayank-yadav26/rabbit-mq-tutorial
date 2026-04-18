@@ -1,0 +1,43 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: rabbitmq-mtls
+    hostname: rabbitmq-mtls
+    ports:
+      # AMQP protocol (mTLS on 5671)
+      - "5671:5671"
+      # Management UI (unencrypted, for convenience in dev)
+      - "15672:15672"
+    volumes:
+      # Mount RabbitMQ configuration
+      - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+      
+      # Mount certificate files
+      # These paths must match what's in rabbitmq.conf
+      - ./certificates/result/server_certificate.pem:/etc/rabbitmq/certs/server_certificate.pem:ro
+      - ./certificates/result/server_key.pem:/etc/rabbitmq/certs/server_key.pem:ro
+      - ./certificates/result/ca_certificate.pem:/etc/rabbitmq/certs/ca_certificate.pem:ro
+    
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+      RABBITMQ_CONFIG_FILE: /etc/rabbitmq/rabbitmq.conf
+    
+    # Enable plugins
+    command: >
+      bash -c "rabbitmq-plugins enable rabbitmq_management &&
+               rabbitmq-server"
+    
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "check_port_connectivity"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    
+    networks:
+      - rabbitmq-network
+
+networks:
+  rabbitmq-network:
+    driver: bridge
