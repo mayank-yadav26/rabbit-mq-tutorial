@@ -11,6 +11,7 @@ services:
     volumes:
       # Mount RabbitMQ configuration
       - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+      - ./definitions.json:/etc/rabbitmq/definitions.json:ro
       
       # Mount certificate files
       # These paths must match what's in rabbitmq.conf
